@@ -9,6 +9,8 @@ const synonymRoute = require("./synonym.route");
 const tagRoute = require("./tag.route");
 const topicRoute = require("./topic.route");
 const userRoute = require("./user.route");
+const adminRoute = require("./admin.route");
+
 
 
 
@@ -22,6 +24,8 @@ router.use("/synonym", synonymRoute);
 router.use("/tag", tagRoute);
 router.use("/topic", topicRoute);
 router.use("/user", userRoute);
+router.use("/admin", adminRoute);
+
 
 
 

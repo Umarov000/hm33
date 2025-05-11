@@ -1,8 +1,8 @@
 const { sendErrorRes } = require("../helpers/send_error_res");
-const { authorValidation } = require("../validation/author.validation");
 const bcrypt = require('bcrypt');
 const { userValidation } = require("../validation/user.validation");
 const User = require("../schemas/User");
+const jwt = require("jsonwebtoken");
 
 const create = async (req, res) => {
   try {
@@ -74,9 +74,23 @@ const loginUser = async (req, res) => {
     if(!validPassword){
        return res.status(401).send({ message: `Parol yoki email xato!` });
     }
+
+    const payload = {
+        id: user._id,
+        email: user.email,
+        isActive: user.isActive
+
+    }
+    const token = jwt.sign(payload, config.get("userTokenKey"), {
+      expiresIn: config.get("tokenExpTime"),
+    });
     res
       .status(201)
-      .send({ message: `Tizimga xush kelibsiz ${user.name}`, id: user.id });
+      .send({
+        message: `Tizimga xush kelibsiz ${user.name}`,
+        id: user.id,
+        token,
+      });
   } catch (error) {
     sendErrorRes(error, res);
   }
